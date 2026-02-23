@@ -1,12 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="mn">
 <head>
-<meta property="og:title" content="">
-<meta property="og:description" content="">
-<meta property="og:image" content="">
-<meta name="twitter:card" content="none">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Prevent previews -->
+<meta property="og:title" content=" ">
+<meta property="og:description" content=" ">
+<meta property="og:image" content=" ">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex, nofollow">
+
 <title>URGENT SYSTEM ERROR</title>
 
 <style>
@@ -124,52 +128,28 @@ Press ENTER or TAP to continue...
 <div id="terminal" class="hidden"></div>
 
 <div id="finalReveal" class="hidden">
-
     <div style="font-size:18px;">UPGRADING HUMAN VERSION...</div>
     <div id="rollingNumber">0</div>
     <div id="levelUnlocked" style="font-size:26px;opacity:0;">
         🔓 LEVEL 21 UNLOCKED 🔓
     </div>
-
-    <div id="birthdayContent">
-        <div class="glitch" style="margin-top:30px;">🎉 HAPPY BIRTHDAY 🎉</div>
-
-        <img src="image.jpg" alt="ZOLBOO">
-
-        <div id="birthday">
-            To: ZOLBOO 👑<br><br>
-            Born: 2005<br>
-            Version: 21.0 Released 🎂<br>
-            Status: Certified Chaos Queen<br>
-            Threat Level: Legal Worldwide 😌<br><br>
-            YOLO шдэээ алаад өгөөрэй 😂<br><br>
-            System stability = 100% because you exist.<br>
-            Thanks for being one of the real ones for all these years.
-        </div>
-    </div>
-
+    <div id="birthdayContent"></div>
 </div>
 
-<audio id="music" src="music.mp3"></audio>
+<audio id="music"></audio>
 <canvas id="confetti"></canvas>
 
 <script>
 let stage = 0;
-let terminal = document.getElementById("terminal");
-let errorScreen = document.getElementById("errorScreen");
-let finalReveal = document.getElementById("finalReveal");
-let music = document.getElementById("music");
+const terminal = document.getElementById("terminal");
+const errorScreen = document.getElementById("errorScreen");
+const finalReveal = document.getElementById("finalReveal");
+const birthdayContent = document.getElementById("birthdayContent");
+const music = document.getElementById("music");
 
-document.addEventListener("keydown", function(e){
-    if(e.key === "Enter" && stage === 0){
-        startSequence();
-    }
-});
-document.addEventListener("click", function(){
-    if(stage === 0){
-        startSequence();
-    }
-});
+// User triggers
+document.addEventListener("keydown", e => { if(e.key==="Enter" && stage===0) startSequence(); });
+document.addEventListener("click", () => { if(stage===0) startSequence(); });
 
 function startSequence(){
     stage = 1;
@@ -177,7 +157,7 @@ function startSequence(){
     startScan();
 }
 
-/* TERMINAL SCAN */
+// TERMINAL SCAN
 const lines = [
 "SYSTEM SCAN INITIATED...",
 "Analyzing human...",
@@ -195,7 +175,6 @@ const lines = [
 ];
 
 let i = 0;
-
 function startScan(){
     terminal.classList.remove("hidden");
     typeLine();
@@ -217,11 +196,10 @@ function triggerReveal(){
     startLevelAnimation();
 }
 
-/* LEVEL 21 ROLL */
+// LEVEL 21 ROLL
 function startLevelAnimation() {
     const numberEl = document.getElementById("rollingNumber");
     const levelText = document.getElementById("levelUnlocked");
-    const birthdayContent = document.getElementById("birthdayContent");
 
     let interval = setInterval(() => {
         numberEl.innerText = Math.floor(Math.random() * 100);
@@ -233,8 +211,26 @@ function startLevelAnimation() {
         numberEl.classList.add("pop","glow");
         levelText.style.opacity = 1;
 
+        // Add birthday content dynamically AFTER interaction
         setTimeout(() => {
+            birthdayContent.innerHTML = `
+                <div class="glitch" style="margin-top:30px;">🎉 HAPPY BIRTHDAY 🎉</div>
+                <img src="image.jpg" alt="ZOLBOO">
+                <div id="birthday">
+                    To: ZOLBOO 👑<br><br>
+                    Born: 2005<br>
+                    Version: 21.0 Released 🎂<br>
+                    Status: Certified Chaos Queen<br>
+                    Threat Level: Legal Worldwide 😌<br><br>
+                    YOLO шдэээ алаад өгөөрэй 😂<br><br>
+                    System stability = 100% because you exist.<br>
+                    Thanks for being one of the real ones for all these years.
+                </div>
+            `;
             birthdayContent.classList.add("show");
+
+            // Play music dynamically
+            music.src = "music.mp3";
             music.play();
             startConfetti();
         }, 1000);
@@ -242,54 +238,35 @@ function startLevelAnimation() {
     }, 2500);
 }
 
-/* CONFETTI */
+// CONFETTI
 const canvas = document.getElementById("confetti");
 const ctx = canvas.getContext("2d");
 
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
+function resizeCanvas(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
 let pieces = [];
-for (let i = 0; i < 200; i++) {
-    pieces.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 6 + 4,
-        speedY: Math.random() * 3 + 2,
-        speedX: Math.random() * 2 - 1
-    });
+for(let i=0;i<200;i++){
+    pieces.push({ x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*6+4, speedY:Math.random()*3+2, speedX:Math.random()*2-1 });
 }
 
-function drawConfetti() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+function drawConfetti(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.fillStyle = "white";
-
-    for (let p of pieces) {
+    for(let p of pieces){
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
         ctx.fill();
-    }
-
-    for (let p of pieces) {
         p.y += p.speedY;
         p.x += p.speedX;
-
-        if (p.y > canvas.height) {
-            p.y = -10;
-            p.x = Math.random() * canvas.width;
-        }
-        if (p.x > canvas.width) p.x = 0;
-        if (p.x < 0) p.x = canvas.width;
+        if(p.y>canvas.height){ p.y=-10; p.x=Math.random()*canvas.width; }
+        if(p.x>canvas.width) p.x=0;
+        if(p.x<0) p.x=canvas.width;
     }
 }
 
-function startConfetti(){
-    setInterval(drawConfetti, 20);
-}
+function startConfetti(){ setInterval(drawConfetti,20); }
 </script>
 
 </body>
