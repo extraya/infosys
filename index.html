@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>URGENT SYSTEM ERROR</title>
+
+<style>
+body {
+    margin: 0;
+    background: black;
+    color: #00ff88;
+    font-family: monospace;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+.hidden { display: none; }
+
+.red-alert {
+    color: red;
+    font-size: 22px;
+    margin-top: 30vh;
+    animation: blink 0.6s infinite;
+    padding: 20px;
+}
+
+@keyframes blink {
+    50% { opacity: 0.3; }
+}
+
+#terminal {
+    padding: 20px;
+    font-size: 16px;
+    white-space: pre-line;
+    text-align: left;
+    max-width: 600px;
+    margin: auto;
+}
+
+.glitch {
+    font-size: 40px;
+    color: white;
+    animation: glitch 0.3s infinite;
+}
+
+@keyframes glitch {
+    0% { text-shadow: 2px 2px red; }
+    50% { text-shadow: -2px -2px blue; }
+    100% { text-shadow: 2px -2px lime; }
+}
+
+#rollingNumber {
+    font-size: 80px;
+    margin-top: 10px;
+}
+
+.pop {
+    animation: pop 0.6s ease forwards;
+}
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.6); }
+    100% { transform: scale(1.2); }
+}
+
+.glow {
+    animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px #00ff88; }
+    to { text-shadow: 0 0 30px #00ff88; }
+}
+
+#birthdayContent {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s ease;
+}
+
+#birthdayContent.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+img {
+    width: 70%;
+    max-width: 250px;
+    border-radius: 20px;
+    margin-top: 20px;
+    box-shadow: 0 0 20px white;
+}
+
+#birthday {
+    margin-top: 20px;
+    font-size: 18px;
+    padding: 0 20px 40px 20px;
+    color: white;
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+
+<div id="errorScreen" class="red-alert">
+⚠ CRITICAL SYSTEM ERROR ⚠ <br><br>
+Unauthorized human detected.<br>
+Press ENTER or TAP to continue...
+</div>
+
+<div id="terminal" class="hidden"></div>
+
+<div id="finalReveal" class="hidden">
+
+    <div style="font-size:18px;">UPGRADING HUMAN VERSION...</div>
+    <div id="rollingNumber">0</div>
+    <div id="levelUnlocked" style="font-size:26px;opacity:0;">
+        🔓 LEVEL 21 UNLOCKED 🔓
+    </div>
+
+    <div id="birthdayContent">
+        <div class="glitch" style="margin-top:30px;">🎉 HAPPY BIRTHDAY 🎉</div>
+
+        <img src="image.jpg" alt="ZOLBOO">
+
+        <div id="birthday">
+            To: ZOLBOO 👑<br><br>
+            Born: 2005<br>
+            Version: 21.0 Released 🎂<br>
+            Status: Certified Chaos Queen<br>
+            Threat Level: Legal Worldwide 😌<br><br>
+            YOLO шдэээ алаад өгөөрэй 😂<br><br>
+            System stability = 100% because you exist.<br>
+            Thanks for being one of the real ones for all these years.
+        </div>
+    </div>
+
+</div>
+
+<audio id="music" src="music.mp3"></audio>
+<canvas id="confetti"></canvas>
+
+<script>
+let stage = 0;
+let terminal = document.getElementById("terminal");
+let errorScreen = document.getElementById("errorScreen");
+let finalReveal = document.getElementById("finalReveal");
+let music = document.getElementById("music");
+
+document.addEventListener("keydown", function(e){
+    if(e.key === "Enter" && stage === 0){
+        startSequence();
+    }
+});
+document.addEventListener("click", function(){
+    if(stage === 0){
+        startSequence();
+    }
+});
+
+function startSequence(){
+    stage = 1;
+    errorScreen.classList.add("hidden");
+    startScan();
+}
+
+/* TERMINAL SCAN */
+const lines = [
+"SYSTEM SCAN INITIATED...",
+"Analyzing human...",
+"Name: ZOLBOO",
+"Birth Year Detected: 2005",
+"Age Upgrade Confirmed: 21",
+"Status: Certified Chaos.",
+"Loading memories...",
+"Loading emotional support...",
+"Loading random 2AM conversations...",
+"",
+"FINAL RESULT:",
+"This human survived another year.",
+"Preparing celebration protocol..."
+];
+
+let i = 0;
+
+function startScan(){
+    terminal.classList.remove("hidden");
+    typeLine();
+}
+
+function typeLine(){
+    if(i < lines.length){
+        terminal.innerHTML += lines[i] + "\n";
+        i++;
+        setTimeout(typeLine, 600);
+    } else {
+        setTimeout(triggerReveal, 1500);
+    }
+}
+
+function triggerReveal(){
+    terminal.classList.add("hidden");
+    finalReveal.classList.remove("hidden");
+    startLevelAnimation();
+}
+
+/* LEVEL 21 ROLL */
+function startLevelAnimation() {
+    const numberEl = document.getElementById("rollingNumber");
+    const levelText = document.getElementById("levelUnlocked");
+    const birthdayContent = document.getElementById("birthdayContent");
+
+    let interval = setInterval(() => {
+        numberEl.innerText = Math.floor(Math.random() * 100);
+    }, 60);
+
+    setTimeout(() => {
+        clearInterval(interval);
+        numberEl.innerText = 21;
+        numberEl.classList.add("pop","glow");
+        levelText.style.opacity = 1;
+
+        setTimeout(() => {
+            birthdayContent.classList.add("show");
+            music.play();
+            startConfetti();
+        }, 1000);
+
+    }, 2500);
+}
+
+/* CONFETTI */
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+let pieces = [];
+for (let i = 0; i < 200; i++) {
+    pieces.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 6 + 4,
+        speedY: Math.random() * 3 + 2,
+        speedX: Math.random() * 2 - 1
+    });
+}
+
+function drawConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+
+    for (let p of pieces) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    for (let p of pieces) {
+        p.y += p.speedY;
+        p.x += p.speedX;
+
+        if (p.y > canvas.height) {
+            p.y = -10;
+            p.x = Math.random() * canvas.width;
+        }
+        if (p.x > canvas.width) p.x = 0;
+        if (p.x < 0) p.x = canvas.width;
+    }
+}
+
+function startConfetti(){
+    setInterval(drawConfetti, 20);
+}
+</script>
+
+</body>
+</html>
